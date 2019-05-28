@@ -70,7 +70,7 @@ def kbevent(e):
                                                     left_top[0]) + 1, (right_bottom[1] - left_top[1]) + 1
             try:
                 bar = Popen(
-                    f'timeout 3 lemonbar -d -n "my_lemonbar" -g {w}x{h}+{l}+{t} -B "#88005588"', shell=True)
+                    f'timeout 3 lemonbar -d -n "my_lemonbar" -g {w}x{h}+{l}+{t} -B "#44005588"', shell=True)
             except:
                 pass
             notify(
@@ -97,6 +97,7 @@ def kbevent(e):
             process.terminate()
             notify(f'Stopped recording and exited USSR. Output file saved to:\r{out_file}')
             call(['xdg-open', SAVE_LOCATION])
+            sleep(1)
             exit()
 
 
