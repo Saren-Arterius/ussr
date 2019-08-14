@@ -10,6 +10,8 @@ SAVE_LOCATION = '/tmp' # Video out location
 VC = 'hevc_vaapi' # or h264_vaapi
 FRAMERATE = 60
 QP = 18 # Video quality, lower (=> 0) is better, higher (=> 51) is worse
+HQ_MP4 = True
+HQ_MP4_CRF = 25
 
 SCRIPT_PATH = realpath(dirname(__file__))
 NOTIFY_SEND_PATH = join(SCRIPT_PATH, './notify-send.py')
@@ -86,7 +88,7 @@ def kbevent(e):
             out_file = join(SAVE_LOCATION, f'{time()}.mp4')
             command = f"""LIBVA_DRIVER_NAME=iHD ffmpeg -y \
         -device /dev/dri/card0 -f kmsgrab -framerate {FRAMERATE} -i - \
-        -vaapi_device /dev/dri/renderD128 -vf 'hwmap=derive_device=vaapi,crop={w}:{h}:{l}:{t},scale_vaapi=format=nv12' \
+        -vaapi_device /dev/dri/renderD128 -vf 'hwmap=derive_device=vaapi,crop={w}:{h}:{l}:{t},scale_vaapi={w}:{h}:format=nv12' \
         -c:v {VC} -qp:v {QP} \
         {out_file}"""
             print(command)
@@ -95,7 +97,11 @@ def kbevent(e):
             state = 3
         elif state == 3:
             process.terminate()
-            notify(f'Stopped recording and exited USSR. Output file saved to:\r{out_file}')
+            if HQ_MP4:
+                notify(f'Stopped recording and exited USSR. Output file saved to:\r{out_file}. Encoding to high quality x264 mp4...')
+                call(['ffmpeg', '-y', '-i', out_file, '-c:v', 'libx264', '-crf', str(HQ_MP4_CRF), '-preset', 'veryslow', out_file + '.hq.mp4'])
+            else:
+                notify(f'Stopped recording and exited USSR. Output file saved to:\r{out_file}')
             call(['xdg-open', SAVE_LOCATION])
             sleep(1)
             exit()
