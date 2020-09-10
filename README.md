@@ -1,7 +1,7 @@
 # Ultra Simple Screen Recorder
 This program is for recording screen on Linux. This program utilizes ffmpeg's kmsgrab capture and vaapi encoding to achieve highest possible performance at least on ~~our~~ my laptop. 
 
-Currently only Arch Linux, X11 (and maybe intel iGPUs) is supported.
+Currently only Arch Linux, X11 (and maybe intel iGPUs) is supported. Wayland is supported, but keyboard capture only work with a Xwayland window (firefox etc) in focus.
 
 # Install
 Ensure `community/intel-media-driver`, `aur/ffmpeg-vaapi-crop`, `aur/lemonbar-xft-git` and is installed.
